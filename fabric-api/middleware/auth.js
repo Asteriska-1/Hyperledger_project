@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Файл с секретами, включая ключ для подписи JWT
-const secretsPath = path.join(__dirname, '../config/secrets.json');
+const secretsPath = path.join(__dirname, '../secrets.json');
 
 const authenticateManager = (req, res, next) => {
   const token = req.header('Authorization');
