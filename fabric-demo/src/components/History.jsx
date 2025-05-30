@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -148,9 +147,8 @@ export default function History() {
 
           <Form onSubmit={fetchHistory} className="mb-3 d-flex flex-wrap align-items-end">
             <Form.Group className="me-2 mb-2">
-              <Form.Label>Component ID</Form.Label>
+              <Form.Label>ID компонента</Form.Label>
               <Form.Control
-                placeholder="SSD"
                 value={id}
                 onChange={e => setId(e.target.value)}
                 required

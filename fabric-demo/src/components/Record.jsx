@@ -1,4 +1,3 @@
-// src/components/Record.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
@@ -43,7 +42,7 @@ export default function Record() {
 
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
-            <Form.Label>Component ID</Form.Label>
+            <Form.Label>ID компонента</Form.Label>
             <Form.Control
               name="componentID"
               value={form.componentID}
@@ -61,7 +60,7 @@ export default function Record() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Stage</Form.Label>
+            <Form.Label>Стадия</Form.Label>
             <Form.Select
               name="stage"
               value={form.stage}
@@ -73,7 +72,7 @@ export default function Record() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Price</Form.Label>
+            <Form.Label>Цена</Form.Label>
             <Form.Control
               type="number"
               step="0.01"

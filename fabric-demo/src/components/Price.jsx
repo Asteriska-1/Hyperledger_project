@@ -26,21 +26,20 @@ export default function Price() {
   return (
     <Card className="mt-4">
       <Card.Body>
-        <Card.Title>Get Current Price</Card.Title>
+        <Card.Title>Получить текущую цену</Card.Title>
 
         <Form onSubmit={handle} className="mb-3">
           <Form.Group controlId="componentId">
-            <Form.Label>Component ID</Form.Label>
+            <Form.Label>ID компонента</Form.Label>
             <Form.Control
               type="text"
-              placeholder="id"
               value={id}
               onChange={e => setId(e.target.value)}
               required
             />
           </Form.Group>
           <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? <Spinner as="span" animation="border" size="sm" /> : 'Fetch'}
+            {loading ? <Spinner as="span" animation="border" size="sm" /> : 'Показать'}
           </Button>
         </Form>
 
@@ -49,23 +48,23 @@ export default function Price() {
         {result && (
           <Card className="border-success">
             <Card.Header>
-              <strong>Organization:</strong> {result.organization}
+              <strong>Организация:</strong> {result.organization}
             </Card.Header>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <strong>Component:</strong> {result.componentID}
+                <strong>ID компонента:</strong> {result.componentID}
               </ListGroup.Item>
               <ListGroup.Item>
                 <strong>Batch:</strong> {result.batchID}
               </ListGroup.Item>
               <ListGroup.Item>
-                <strong>Stage:</strong> {result.stage}
+                <strong>Стадия:</strong> {result.stage}
               </ListGroup.Item>
               <ListGroup.Item>
-                <strong>Date:</strong> {result.date}
+                <strong>Дата:</strong> {result.date}
               </ListGroup.Item>
               <ListGroup.Item>
-                <strong>Price:</strong> ${result.price.toFixed(2)}
+                <strong>Цена:</strong> ${result.price.toFixed(2)}
               </ListGroup.Item>
             </ListGroup>
           </Card>
