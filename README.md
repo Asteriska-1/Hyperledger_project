@@ -12,7 +12,7 @@ blockchain/
 ├── fabric-samples/         # Официальный репозиторий Hyperledger Fabric (с test-network)
 ├── chaincode/              # Код смарт-контракта на Go (pricing_cc.go, go.mod, go.sum)
 ├── fabric-api/             # Веб‑сервер API (Node.js + Docker Compose)
-├── fabric-demo/        # Клиентская часть (React)
+├── fabric-demo/            # Клиентская часть (React)
 └── import_org{1,2}         # (опционально) скрипты ENV-переменных для ручного вызова методов
 ```
 
