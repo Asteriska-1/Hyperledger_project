@@ -59,22 +59,21 @@ app.post('/record', verifyJWT, validateRecordData, async (req, res) => {
 });
 
 
-// POST /record
-// Ожидает JSON с { componentID, batchID, stage, price }
-app.post('/record', validateRecordData, async (req, res) => {
-  const { componentID, batchID, stage, price } = req.body; // 'price' теперь 'цена' после валидации
+// GET /price-history/:componentId
+app.get('/price-history/:componentId', async (req, res) => {
+  const componentId = req.params.componentId;
 
   try {
     const { contract, gateway } = await getContract();
 
-    // цена передаем как строку (как в RecordPrice)
-    await contract.submitTransaction('RecordPrice', componentID, batchID, stage, price.toString());
+    const result = await contract.evaluateTransaction('GetPriceHistory', componentId);
 
     await gateway.disconnect();
 
-    res.json({ message: 'Цена успешно записана' });
+    const parsed = JSON.parse(result.toString());
+    res.json(parsed);
   } catch (error) {
-    console.error(`Ошибка записи цены: ${error}`);
+    console.error(`Ошибка вызова смарт-контракта: ${error}`);
     res.status(500).json({ error: error.message });
   }
 });
