@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/App.jsx
+import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 
@@ -7,42 +8,46 @@ import Price   from './components/Price';
 import History from './components/History';
 import Record  from './components/Record';
 
-function App() {
-  const [authed, setAuthed] = useState(false);
+export default function App() {
+  const [authed, setAuthed] = React.useState(false);
 
   return (
     <BrowserRouter>
-       <Navbar bg="light" expand="md">
-         <Container>
-           <Navbar.Brand as={Link} to="/">Fabric Demo</Navbar.Brand>
-           <Navbar.Toggle aria-controls="main-nav" />
-           <Navbar.Collapse id="main-nav">
-             <Nav className="me-auto">
-               <Nav.Link as={Link} to="/price">Price</Nav.Link>
-               <Nav.Link as={Link} to="/history">History</Nav.Link>
-               <Nav.Link as={Link} to="/record">Record</Nav.Link>
-             </Nav>
-             <Nav>
-               {!authed
-                 ? <Nav.Link as={Link} to="/login">Manager Login</Nav.Link>
-                 : <Nav.Item className="navbar-text">✔️ Authenticated</Nav.Item>}
-             </Nav>
-           </Navbar.Collapse>
-         </Container>
-       </Navbar>
-      <Routes>
-        <Route path="/" element={<h2>Welcome to Fabric Demo UI</h2>} />
-        <Route path="/login" element={<Login onAuth={() => setAuthed(true)} />} />
-        <Route path="/price" element={<Price />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/record" element={
-          authed
-            ? <Record />
-            : <Navigate to="/login" replace />
-        } />
-      </Routes>
+      <Navbar bg="primary" variant="dark" expand="md">
+        <Container>
+          <Navbar.Brand as={Link} to="/">PriceTracker</Navbar.Brand>
+          <Navbar.Toggle aria-controls="main-nav" />
+          <Navbar.Collapse id="main-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/price">Текущие цены</Nav.Link>
+              <Nav.Link as={Link} to="/history">История цен</Nav.Link>
+              {authed && (
+                <Nav.Link as={Link} to="/record">Добавить запись</Nav.Link>
+              )}
+            </Nav>
+            <Nav>
+              {!authed
+                ? <Nav.Link as={Link} to="/login">Менеджерам</Nav.Link>
+                : <Nav.Item className="navbar-text text-light">✔️ Authenticated</Nav.Item>
+              }
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <Container className="py-4">
+        <Routes>
+          <Route path="/" element={<h2 className="text-center">Добро пожаловать в PriceTracker</h2>} />
+          <Route path="/login"   element={<Login onAuth={() => setAuthed(true)} />} />
+          <Route path="/price"   element={<Price />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/record"  element={
+            authed
+              ? <Record />
+              : <Navigate to="/login" replace />
+          } />
+        </Routes>
+      </Container>
     </BrowserRouter>
   );
 }
-
-export default App;

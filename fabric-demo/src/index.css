@@ -1,0 +1,25 @@
+/* index.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f6f9;
+}
+
+h2, .card-title {
+  font-weight: 500;
+}
+
+.navbar, .btn-primary {
+  background-color: #0056b3 !important;
+  border-color: #004494 !important;
+}
+
+.btn-success {
+  background-color: #28a745 !important;
+  border-color: #218838 !important;
+}
+
+.card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
