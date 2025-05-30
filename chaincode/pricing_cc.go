@@ -21,18 +21,18 @@ type PriceRecord struct {
 	Price       float64 `json:"price"`
 	Stage       string  `json:"stage"`
 	Date        string  `json:"date"`
+	Organization string `json:"organization"`
 }
 
 // InitLedger adds a few initial price records to the ledger.
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	initialPrices := []PriceRecord{
-		{ComponentID: "cpu-123", BatchID: "batch-a", Price: 100.00, Stage: "production", Date: "2025-05-28"},
-		{ComponentID: "memory-456", BatchID: "batch-b", Price: 50.50, Stage: "testing", Date: "2025-05-28"},
-		{ComponentID: "storage-789", BatchID: "batch-c", Price: 200.75, Stage: "production", Date: "2025-05-28"},
+		{ComponentID: "cpu-123", BatchID: "batch-a", Price: 100.00, Stage: "production", Date: "2025-04-20"},
+		{ComponentID: "memory-456", BatchID: "batch-b", Price: 50.50, Stage: "testing", Date: "2025-04-20"},
+		{ComponentID: "storage-789", BatchID: "batch-c", Price: 200.75, Stage: "production", Date: "2025-04-20"},
 	}
 
 	for _, record := range initialPrices {
-		// manually call RecordPrice for proper key generation and indexing
 		err := s.RecordPrice(ctx, record.ComponentID, record.BatchID, record.Stage, fmt.Sprintf("%.2f", record.Price))
 		if err != nil {
 			return fmt.Errorf("InitLedger failed: %v", err)
@@ -48,7 +48,6 @@ func (s *SmartContract) RecordPrice(ctx contractapi.TransactionContextInterface,
 		return fmt.Errorf("failed to parse price string to float: %v", err)
 	}
 
-	// 1. Get and increment the index counter
 	counterKey := "priceCounter:" + componentID
 	counterBytes, err := ctx.GetStub().GetState(counterKey)
 	if err != nil {
@@ -62,22 +61,26 @@ func (s *SmartContract) RecordPrice(ctx contractapi.TransactionContextInterface,
 			return fmt.Errorf("failed to parse counter: %v", err)
 		}
 	}
-	index++ // increment
+	index++
 
-	// 2. Update counter in ledger
 	err = ctx.GetStub().PutState(counterKey, []byte(strconv.Itoa(index)))
 	if err != nil {
 		return fmt.Errorf("failed to update counter: %v", err)
 	}
 
-	// 3. Create record
 	currentDate := time.Now().UTC().Format("2006-01-02")
+	org, err := ctx.GetClientIdentity().GetMSPID()
+	if err != nil {
+		return fmt.Errorf("failed to get organization MSPID: %v", err)
+	}
+
 	record := PriceRecord{
 		ComponentID: componentID,
 		BatchID:     batchID,
 		Price:       price,
 		Stage:       stage,
 		Date:        currentDate,
+		Organization: org,
 	}
 
 	recordJSON, err := json.Marshal(record)
@@ -85,7 +88,6 @@ func (s *SmartContract) RecordPrice(ctx contractapi.TransactionContextInterface,
 		return fmt.Errorf("failed to marshal price record: %v", err)
 	}
 
-	// 4. Create composite key: price~componentID~index
 	priceKey, err := ctx.GetStub().CreateCompositeKey("price", []string{componentID, fmt.Sprintf("%06d", index)})
 	if err != nil {
 		return fmt.Errorf("failed to create composite key: %v", err)
@@ -180,4 +182,3 @@ func main() {
 		fmt.Printf("Error starting smart contract: %v", err)
 	}
 }
-

@@ -2,6 +2,7 @@ const express = require('express');
 const { Gateway, Wallets } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
+const { validateRecordData } = require('./middleware/validation');
 
 const app = express();
 const port = 3000;
@@ -31,7 +32,7 @@ async function getContract() {
 
   const network = await gateway.getNetwork('mychannel');
   const contract = network.getContract('pricing_cc');
-  
+
   return { contract, gateway };
 }
 
@@ -56,17 +57,13 @@ app.get('/price-history/:componentId', async (req, res) => {
 
 // POST /record
 // Ожидает JSON с { componentID, batchID, stage, price }
-app.post('/record', async (req, res) => {
-  const { componentID, batchID, stage, price } = req.body;
-
-  if (!componentID || !batchID || !stage || price === undefined) {
-    return res.status(400).json({ error: 'componentID, batchID, stage и price обязательны' });
-  }
+app.post('/record', validateRecordData, async (req, res) => {
+  const { componentID, batchID, stage, price } = req.body; // 'price' теперь 'цена' после валидации
 
   try {
     const { contract, gateway } = await getContract();
 
-    // price передаем как строку (как в RecordPrice)
+    // цена передаем как строку (как в RecordPrice)
     await contract.submitTransaction('RecordPrice', componentID, batchID, stage, price.toString());
 
     await gateway.disconnect();
