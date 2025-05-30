@@ -1,8 +1,0 @@
-{
-  "fabric": {
-    "ccpPath": "../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json",
-    "channelName": "mychannel",
-    "chaincodeName": "pricing_cc",
-    "walletPath": "./wallet"
-  }
-}

@@ -1,13 +1,16 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const { Gateway, Wallets } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
 const { validateRecordData } = require('./middleware/validation');
+const { authenticateManager, verifyJWT } = require('./middleware/auth');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Путь к connection profile
 const ccpPath = path.resolve(__dirname, '..', 'fabric-samples', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
@@ -37,23 +40,24 @@ async function getContract() {
 }
 
 // GET /price-history/:componentId
-app.get('/price-history/:componentId', async (req, res) => {
-  const componentId = req.params.componentId;
+app.post('/record', verifyJWT, validateRecordData, async (req, res) => {
+  const { componentID, batchID, stage, price } = req.body;
 
   try {
     const { contract, gateway } = await getContract();
 
-    const result = await contract.evaluateTransaction('GetPriceHistory', componentId);
+    // цену передаем как строку (как в RecordPrice)
+    await contract.submitTransaction('RecordPrice', componentID, batchID, stage, price.toString());
 
     await gateway.disconnect();
 
-    const parsed = JSON.parse(result.toString());
-    res.json(parsed);
+    res.json({ message: 'Цена успешно записана' });
   } catch (error) {
-    console.error(`Ошибка вызова смарт-контракта: ${error}`);
+    console.error(`Ошибка записи цены: ${error}`);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // POST /record
 // Ожидает JSON с { componentID, batchID, stage, price }
@@ -92,6 +96,13 @@ app.get('/price/:componentId', async (req, res) => {
     console.error(`Ошибка получения текущей цены: ${error}`);
     res.status(500).json({ error: error.message });
   }
+});
+
+
+// POST /manager-login
+app.post('/manager-login', authenticateManager, (req, res) => {
+  // authenticateManager обрабатывает установку куки и отправку ответа
+  // Этот обработчик может быть пустым или отправлять дополнительное сообщение
 });
 
 
