@@ -1,4 +1,4 @@
-# Blockchain Pricing Sample with Hyperledger Fabric
+# PriceTracker with Hyperledger Fabric
 
 [![Go Version](https://img.shields.io/badge/go-%3E%3D1.16-blue)](https://golang.org/) [![Docker](https://img.shields.io/badge/docker-supported-blue)](https://www.docker.com/) [![Hyperledger Fabric](https://img.shields.io/badge/fabric-samples-orange)](https://github.com/hyperledger/fabric-samples)
 
