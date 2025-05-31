@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import Login   from './components/Login';
 import Price   from './components/Price';
 import History from './components/History';
 import Record  from './components/Record';
+import Home    from './components/Home';
 
 export default function App() {
   const [authed, setAuthed] = React.useState(false);
@@ -28,7 +28,7 @@ export default function App() {
             <Nav>
               {!authed
                 ? <Nav.Link as={Link} to="/login">Менеджерам</Nav.Link>
-                : <Nav.Item className="navbar-text text-light">✔️ Authenticated</Nav.Item>
+                : <Nav.Item className="navbar-text text-light">✔️ Авторизован</Nav.Item>
               }
             </Nav>
           </Navbar.Collapse>
@@ -37,7 +37,7 @@ export default function App() {
 
       <Container className="py-4">
         <Routes>
-          <Route path="/" element={<h2 className="text-center">Добро пожаловать в PriceTracker</h2>} />
+          <Route path="/" element={<Home />} />
           <Route path="/login"   element={<Login onAuth={() => setAuthed(true)} />} />
           <Route path="/price"   element={<Price />} />
           <Route path="/history" element={<History />} />

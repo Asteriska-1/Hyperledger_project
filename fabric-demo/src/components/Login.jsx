@@ -1,4 +1,3 @@
-// src/components/Login.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
@@ -46,17 +45,17 @@ export default function Login({ onAuth }) {
         <Col xs={12} sm={8} md={6} lg={4} className="mx-auto">
           <Card>
             <Card.Header className="text-center">
-              <h4>Login</h4>
+              <h4>Авторизация</h4>
             </Card.Header>
             <Card.Body>
               {error && <Alert variant="danger">{error}</Alert>}
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="managerToken">
-                  <Form.Label>Токен менеджера</Form.Label>
+                  <Form.Label>Токен</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="Введите секретный токен вашей организации"
+                    placeholder="Секретный токен вашей организации"
                     value={token}
                     onChange={e => setToken(e.target.value)}
                     required
