@@ -101,7 +101,6 @@ app.get('/price/:componentId', async (req, res) => {
 // POST /manager-login
 app.post('/manager-login', authenticateManager, (req, res) => {
   // authenticateManager обрабатывает установку куки и отправку ответа
-  // Этот обработчик может быть пустым или отправлять дополнительное сообщение
 });
 
 
